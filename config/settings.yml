@@ -1,0 +1,4 @@
+plugins:
+  ignore-list_enabled:
+    default: true
+    client: true
