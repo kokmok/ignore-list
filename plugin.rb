@@ -9,7 +9,7 @@ after_initialize do
 
   add_to_serializer(:user, :custom_fields, false) {
     if object.custom_fields == nil then
-      {:status => 'object null'}
+      object.custom_fields['ignored-users']
     else
       object.custom_fields
     end
