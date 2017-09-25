@@ -1,33 +1,37 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
-import RawHtml from 'discourse/widgets/raw-html';
 
 function hideContent(api, siteSettings) {
-  // api.includePostAttributes('custom_fields');
-  // api.includeUserAttributes('ignored_users_key');
 
-  api.decorateWidget('post-contents:after-cooked', dec => {
+  api.decorateCooked(decorate, { onlyStream: true } );
+    function decorate($elem,helper){
+      const post = helper.getModel();
+      const currentUser = api.getCurrentUser();
 
-    const attrs = dec.attrs;
-    console.log('attrs');
-    console.log(attrs);
-    const currentUser = api.getCurrentUser();
-    console.log(currentUser);
-    if (currentUser) {
-      const ignoredUsers = currentUser.custom_fields[currentUser.ignored_users_key].split(',');
-      if (enabled) {
-        return [dec.h('hr'), dec.h('div', new RawHtml({html: `<div class='user-signature'>LOL</div>`}))];
-
+      if (currentUser) {
+        const ignoredUsers = currentUser.custom_fields['ignored_users'].split(',');
+        if (ignoredUsers.includes(post.username)) {
+          console.log('ignored cooked');
+          $elem.addClass('ignoredCooked');
+          $elem.wrapInner('<div class="hidden"></div>');
+          $elem.append('<div class="designorerWrapper">Vous avez choisi d\'ignorer cet utilisateur <button class="designorer btn" value="voir quand même">voir quand même</button></div>');
+          $elem.find('.designorer').on("click",function(e){
+            console.log('clicked');
+            $(e.target).closest('.ignoredCooked').find('.hidden').removeClass('hidden');
+            $(e.target).closest('.designorerWrapper').addClass('hidden');
+            e.preventDefault();
+            return false;
+          });
+        }
       }
     }
-  });
 }
 
 export default {
   name: 'ignore-list',
   initialize(container) {
     const siteSettings = container.lookup('site-settings:main');
-    // if (siteSettings.signatures_enabled) {
+    if (siteSettings.ignored_users_enabled) {
       withPluginApi('0.1', api => hideContent(api, siteSettings));
-    // }
+    }
   }
 };

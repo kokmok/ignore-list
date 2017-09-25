@@ -1,4 +1,4 @@
 plugins:
-  ignore-list_enabled:
+  ignored_users_enabled:
     default: true
     client: true

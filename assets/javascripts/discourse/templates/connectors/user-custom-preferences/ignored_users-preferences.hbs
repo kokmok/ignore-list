@@ -1,0 +1,15 @@
+{{#if siteSettings.ignored_users_enabled}}
+  <div class="control-group ignored_users">
+    <label class="control-label">Utilisateurs ignorés</label>
+    <div class="controls">
+      <label class='text-label'>
+        {{input type="text" class="input-xxlarge" value=model.custom_fields.ignored_users}}
+
+      </label>
+      <div class="instructions">
+        Pseudos séparés par une virgule
+      </div>
+
+    </div>
+  </div>
+{{/if}}
