@@ -7,7 +7,7 @@ function hideContent(api, siteSettings) {
       const post = helper.getModel();
       const currentUser = api.getCurrentUser();
 
-      if (currentUser && currentUser.custom_fields !== null && currentUser.custom_fields['ignored_users'] !== null) {
+      if (currentUser && currentUser.custom_fields !== null && currentUser.custom_fields['ignored_users'] !== null && typeof currentUser.custom_fields['ignored_users'] !== 'undefined') {
 
         const ignoredUsers = currentUser.custom_fields['ignored_users'].split(',');
         if (ignoredUsers.includes(post.username)) {
